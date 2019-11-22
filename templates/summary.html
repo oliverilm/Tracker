@@ -56,10 +56,12 @@
             </thead>
             <tbody>
             {% for i in checkin_list %}
+                {% if not i.is_active %}
                 <tr>
                     <td>{{ i.user }}</td>
                     <td>{{ i.total_hours }}</td>
                 </tr>
+                {% endif %}
             {% endfor %}
             </tbody>
         </table>
