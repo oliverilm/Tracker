@@ -47,18 +47,25 @@ class IndexView(LoginRequiredMixin, CreateView):
         if len(active_checkins) > 0:
             checkin = active_checkins[0]
             checkin.stop = datetime.datetime.now()
-            checkin.total_hours = 1
+
+            a = checkin.start
+            time = datetime.datetime.now() - datetime.datetime(a.year, a.month, a.day, a.hour, a.minute, a.second)
+            hours = time.seconds / 3600
+            checkin.total_hours = str(hours)[:6]
             checkin.is_active = False
             checkin.save()
         else:
-            proj = Project.objects.get(pk=self.request.POST.get("sel"))
-            checkin = CheckIn(
-                project=proj,
-                user=self.request.user,
-                start=datetime.datetime.now(),
-                is_active=True
-            )
-            checkin.save()
+            try:
+                proj = Project.objects.get(pk=self.request.POST.get("sel"))
+                checkin = CheckIn(
+                    project=proj,
+                    user=self.request.user,
+                    start=datetime.datetime.now(),
+                    is_active=True
+                )
+                checkin.save()
+            except Exception as e:
+                pass
         return HttpResponseRedirect("/")
 
     def calc_hours(self):
@@ -66,7 +73,7 @@ class IndexView(LoginRequiredMixin, CreateView):
         checkins = CheckIn.objects.filter(user=self.request.user)
         for i in checkins:
             if not i.is_active:
-                hours += int(i.total_hours)
+                hours += float(i.total_hours[:6])
         return hours
 
     def get_dict_with_proj_and_hours(self):
@@ -75,6 +82,6 @@ class IndexView(LoginRequiredMixin, CreateView):
             hours = 0
             for c in CheckIn.objects.filter(user=self.request.user).filter(project=p.project):
                 if not c.is_active:
-                    hours += int(c.total_hours)
+                    hours += float(c.total_hours[:6])
             proj_dict[p.project] = hours
         return proj_dict
