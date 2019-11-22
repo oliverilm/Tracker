@@ -17,8 +17,8 @@
 
 
  <nav class="navbar navbar-light bg-light">
-        <div style=" width:100%;display: flex; flex-direction: row; justify-content: space-around">
-            <div style="font-size: 20px; font-weight: bolder" class="nav-link">
+        <div style=" width:100%;display: flex; flex-direction: row; justify-content: space-around; flex-wrap: wrap">
+            <div style="font-size: 20px; font-weight: bolder" class="navbar-brand">
                 <div>
                     <i class="fa fa-user" aria-hidden="true"></i>
                     {{ user.first_name.title }}
@@ -27,13 +27,14 @@
 
             </div>
 
-             <div class="nav-link">
+             <div class="navbar-brand">
                 <div style="font-weight: bolder; font-size: 18px">
                     <i class="fa fa-clock-o" aria-hidden="true"></i>
                     total hours: {{ total_hours }}
 
                 </div>
             </div>
+            <div class="row">
             {% if user.is_staff %}
             <div class="nav-link"><a class="btn btn-outline-dark btn-sm" href="/admin">Panel</a></div>
                 {% if request.path == "/summary" %}
@@ -43,6 +44,7 @@
                 {% endif %}
             {% endif %}
             <div class="nav-link"><a class="btn btn-outline-dark btn-sm" href="/accounts/logout">Logout</a></div>
+        </div>
         </div>
 
 </nav>
