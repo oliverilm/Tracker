@@ -2,6 +2,7 @@ import datetime
 
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.forms import ModelForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from crispy_forms.helper import FormHelper
@@ -12,7 +13,6 @@ from django.views.generic import TemplateView, CreateView, UpdateView, FormView,
 
 from Tracker.models import CheckIn, UserInProject, Project
 
-
 class IndexView(LoginRequiredMixin, CreateView):
     template_name = "index.html"
     queryset = None
@@ -22,9 +22,9 @@ class IndexView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         user = self.request.user
+        proj_dict = []
         active_checkins = CheckIn.objects.filter(user=user).filter(is_active=True)
         if len(active_checkins) > 0:
-            print(active_checkins)
             context["working"] = False
             context["value"] = "End work"
             context["project"] = active_checkins[0]
@@ -32,13 +32,17 @@ class IndexView(LoginRequiredMixin, CreateView):
             context["working"] = True
             context["value"] = "Start work"
 
+
         context["my_checkins"] = CheckIn.objects.filter(user=self.request.user)
-        context["total_hours"] = 0
+        context["total_hours"] = self.calc_hours()
+        context["projects_count"] = len(UserInProject.objects.filter(user=self.request.user))
+        context["my_projects"] = self.get_dict_with_proj_and_hours()
         context["projects_with_hours"] = 0
 
         return context
 
     def post(self, request, *args, **kwargs):
+
         active_checkins = CheckIn.objects.filter(user=self.request.user).filter(is_active=True)
         if len(active_checkins) > 0:
             checkin = active_checkins[0]
@@ -46,10 +50,8 @@ class IndexView(LoginRequiredMixin, CreateView):
             checkin.total_hours = 1
             checkin.is_active = False
             checkin.save()
-            print(active_checkins[0].is_active)
-
         else:
-            proj = Project.objects.get(pk=self.request.POST.get("project"))
+            proj = Project.objects.get(pk=self.request.POST.get("sel"))
             checkin = CheckIn(
                 project=proj,
                 user=self.request.user,
@@ -58,3 +60,21 @@ class IndexView(LoginRequiredMixin, CreateView):
             )
             checkin.save()
         return HttpResponseRedirect("/")
+
+    def calc_hours(self):
+        hours = 0
+        checkins = CheckIn.objects.filter(user=self.request.user)
+        for i in checkins:
+            if not i.is_active:
+                hours += int(i.total_hours)
+        return hours
+
+    def get_dict_with_proj_and_hours(self):
+        proj_dict = {}
+        for p in UserInProject.objects.filter(user=self.request.user):
+            hours = 0
+            for c in CheckIn.objects.filter(user=self.request.user).filter(project=p.project):
+                if not c.is_active:
+                    hours += int(c.total_hours)
+            proj_dict[p.project] = hours
+        return proj_dict

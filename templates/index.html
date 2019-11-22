@@ -5,24 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://kit.fontawesome.com/7d289de555.js" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
 
- <div class="container" style="text-align: center">
-    <div class="checkin_form">
-         <form method="POST">{% csrf_token %}
-             {% if working %}
-             {{ form }}
-             {% else %}
-                <h4>Currently working on {{ project.project.name }}</h4>
-                <h4>Started {{ project.start}}</h4>
-             {% endif %}
 
-             <input type="submit" class="btn btn-warning" value="{{ value }}" />
-         </form>
-     </div>
+
+ <div class="container" style="text-align: center">
+
+
+
+ <nav class="navbar navbar-light bg-light">
+        <div style=" width:100%;display: flex; flex-direction: row; justify-content: space-around">
+            <div style="font-size: 20px; font-weight: bolder" class="nav-link">
+                <div>
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    {{ user.first_name.title }}
+                    {{ user.last_name.title  }}
+                </div>
+
+            </div>
+            <div class="nav-link">
+                <div style="font-weight: bolder; font-size: 18px">
+                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                    total hours: {{ total_hours }}
+
+                </div>
+            </div>
+            <div><a class="btn btn-outline-dark nav-link" href="/accounts/logout">Logout</a></div>
+        </div>
+
+</nav>
+
+
+
+        <div class="checkin_form">
+             <form method="POST">{% csrf_token %}
+                 {% if working %}
+                <select name="sel">
+                     {% for p,h in my_projects.items %}
+
+                        <option name="proj" value="{{ p.pk }}">{{ p.name }}</option>
+                    {% endfor %}
+                </select>
+                 {% else %}
+                    <h4>Currently working on {{ project.project.name }}</h4>
+                    <h4>Started {{ project.start}}</h4>
+                 {% endif %}
+
+                 <input type="submit" class="btn btn-warning" value="{{ value }}" />
+             </form>
+         </div>
     <div class="row" id="data">
+        <div class="col-md-3">
+            <table class="table table-bordered" style="background-color: white">
+                <thead>
+                    <tr>
+                        <td colspan="2">Projects: {{ projects_count }}</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p,h in my_projects.items %}
+                        <tr>
+                            <td>{{ p }}</td>
+                            <td>{{ h }} hours</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-6">
+        </div>
+
+
         <table class="table table-hover" style="background-color: white">
             <thead>
                 <tr>
@@ -73,7 +131,7 @@
     body {
         display: flex;
         flex: 1;
-        background: linear-gradient(90deg, #2980b9, #3498db);
+        background: linear-gradient(90deg,#bdc3c7, #ecf0f1 );
     }
 
     select {

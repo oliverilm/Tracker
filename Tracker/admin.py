@@ -15,6 +15,7 @@ class CheckInAdmin(admin.ModelAdmin):
 class UserInProjectAdmin(admin.ModelAdmin):
     list_display = ("user", "project")
 
+
 admin.site.register(Project, ProjectsAdmin)
 admin.site.register(CheckIn, CheckInAdmin)
 admin.site.register(UserInProject, UserInProjectAdmin)

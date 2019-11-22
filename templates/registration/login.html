@@ -9,7 +9,9 @@
 </head>
 <body >
     <div class="container" style="text-align: center">
-        <form method="POST">{% csrf_token %}{{ form }}<input class="btn btn-outline-primary" type="submit" value="Log in"></form>
+        <div style="width: 70%; margin-top: 20%">
+            <form method="POST" style="display: flex; flex-direction: column">{% csrf_token %}{{ form }}<input class="btn btn-warning" type="submit" value="Log in"></form>
+        </div>
     </div>
 </body>
 
@@ -20,5 +22,10 @@
         margin-top: 1em;
     }
 
-    body
+     body {
+        display: flex;
+        flex: 1;
+        background: linear-gradient(90deg,#ecf0f1, #bdc3c7 );
+    }
+
 </style>

@@ -25,7 +25,7 @@ SECRET_KEY = 'w+rse_3c5)iid2-!9c4&s9_2encd%d1c@7_s*p%xm6a*fn(1sw'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -71,7 +71,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'TalTechTracker.wsgi.application'
-
+LOGOUT_REDIRECT_URL = "/"
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases

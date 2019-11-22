@@ -10,6 +10,7 @@ class Project(models.Model):
     def __str__(self):
         return self.name
 
+
 class CheckIn(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True)
@@ -22,4 +23,3 @@ class CheckIn(models.Model):
 class UserInProject(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True)
-
