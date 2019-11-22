@@ -97,6 +97,6 @@ class SummaryView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
-        context["total_hours"] = sum([float(c.total_hours[:6]) for c in CheckIn.objects.filter(is_active=False)])
+        context["total_hours"] = str(sum([float(c.total_hours[:6]) for c in CheckIn.objects.filter(is_active=False)]))[:6]
         context["currently_working"] = CheckIn.objects.filter(is_active=True)
         return context
