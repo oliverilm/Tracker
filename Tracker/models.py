@@ -23,3 +23,9 @@ class CheckIn(models.Model):
 class UserInProject(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True)
+
+
+def get_user_str_repr(self):
+    return self.first_name + " " + self.last_name
+
+User.add_to_class("__str__", get_user_str_repr)

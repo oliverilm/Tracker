@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="row" id="content">
+    <div class="col-md-8">
+
+        <div>
+            {% if currently_working %}
+                <table class="table table-bordered table-sm" style="width: 70%; background-color: white">
+                    <thead>
+
+                            <th colspan="3">Currently active {{ currently_working.length }}</th>
+
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Worker</td>
+                            <td>Project</td>
+                            <td>Checked in</td>
+                        </tr>
+                        {% for c in currently_working %}
+                            <tr>
+                                <td>{{ c.user }}</td>
+                                <td>{{ c.project }}</td>
+                                <td>{{ c.start }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>There is nobody working</p>
+            {% endif %}
+        </div>
+
+        <form style="display: flex; flex-direction: column; width: 100%; margin-top: 2em">
+            <input type="text" placeholder="search..."/>
+            <button type="submit" class="btn btn-outline-info" style="margin-top: 1em">Search</button>
+        </form>
+
+        {% if search_result %}
+            {{ search_result }}
+        {% endif %}
+
+    </div>
+
+
+
+
+    <div class="col-md-4">
+        <table class="table table-hover table-sm" style="background-color: white">
+            <thead>
+                <tr>
+                    <td colspan="2">All Work done ({{ total_hours }}h)</td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for i in checkin_list %}
+                <tr>
+                    <td>{{ i.user }}</td>
+                    <td>{{ i.total_hours }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div style="width: 100%; display: flex; justify-content: space-evenly">
+            <button class="btn btn-outline-success">Download</button>
+            <button class="btn btn-outline-danger">Other action</button>
+        </div>
+    </div>
+    </div>
+
+
+    <style>
+        #content {
+            margin-top: 1em;
+        }
+    </style>
+
+
+{% endblock %}

@@ -16,8 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from Tracker.views import IndexView
+from Tracker.views import IndexView, SummaryView
 
 urlpatterns = [
     path('', IndexView.as_view(), name="index"),
+    path("summary", SummaryView.as_view(), name="summary")
 ]

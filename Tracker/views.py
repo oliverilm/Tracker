@@ -9,7 +9,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
 # Create your views here.
-from django.views.generic import TemplateView, CreateView, UpdateView, FormView, DetailView
+from django.views.generic import TemplateView, CreateView, UpdateView, FormView, DetailView, ListView
 
 from Tracker.models import CheckIn, UserInProject, Project
 
@@ -84,3 +84,19 @@ class IndexView(LoginRequiredMixin, CreateView):
                     hours += float(c.total_hours[:6])
             proj_dict[p.project] = hours
         return proj_dict
+
+
+class SummaryView(LoginRequiredMixin, ListView):
+    model = CheckIn
+    template_name = "summary.html"
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_staff:
+            return super().get(request, kwargs)
+        return HttpResponseRedirect("/")
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context["total_hours"] = sum([float(c.total_hours[:6]) for c in CheckIn.objects.filter(is_active=False)])
+        context["currently_working"] = CheckIn.objects.filter(is_active=True)
+        return context
