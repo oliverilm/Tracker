@@ -15,7 +15,6 @@ from Tracker.models import CheckIn, UserInProject, Project
 
 class IndexView(LoginRequiredMixin, CreateView):
     template_name = "index.html"
-    queryset = None
     model = CheckIn
     fields = ("project", )
 
@@ -33,7 +32,7 @@ class IndexView(LoginRequiredMixin, CreateView):
             context["value"] = "Start work"
 
 
-        context["my_checkins"] = CheckIn.objects.filter(user=self.request.user)
+        context["my_checkins"] = CheckIn.objects.filter(user=self.request.user).order_by("-pk")
         context["total_hours"] = self.calc_hours()
         context["projects_count"] = len(UserInProject.objects.filter(user=self.request.user))
         context["my_projects"] = self.get_dict_with_proj_and_hours()

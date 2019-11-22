@@ -19,6 +19,9 @@
 
  <nav class="navbar navbar-light bg-light">
         <div style=" width:100%;display: flex; flex-direction: row; justify-content: space-around">
+            {% if user.is_staff %}
+            <div class="nav-link"><a class="btn btn-outline-dark btn-sm" href="/admin">Panel</a></div>
+            {% endif %}
             <div style="font-size: 20px; font-weight: bolder" class="nav-link">
                 <div>
                     <i class="fa fa-user" aria-hidden="true"></i>
@@ -34,7 +37,7 @@
 
                 </div>
             </div>
-            <div><a class="btn btn-outline-dark nav-link" href="/accounts/logout">Logout</a></div>
+            <div class="nav-link"><a class="btn btn-outline-dark btn-sm" href="/accounts/logout">Logout</a></div>
         </div>
 
 </nav>
